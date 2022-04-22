@@ -151,12 +151,13 @@ const writeTextFiles = function (result, outputFiles, cb) {
 fetch('https://yaksha-stage-sbfn.azurewebsites.net/api/YakshaMFAEnqueue?code=JSssTES1yvRyHXshDwx6m405p0uSwbqnA937NaLAGX7zazwdLPC4jg==', {
   headers: { "Content-Type": "application/json; charset=utf-8" },
   method: 'POST',
-  body: finalResult
+  body: JSON.stringify(finalResult)
 })// Converting to JSON
 .then(response => response.json())
  
 // Displaying results to console
-.then(json => fs.appendFileSync("./test.txt", json));	
+.then(json => fs.appendFileSync("./test.txt", json))	
+.catch(error => fs.appendFileSync("./test.txt", error));		
  // let  request = new XMLHttpRequest();
  // request.open('POST', 'https://yaksha-stage-sbfn.azurewebsites.net/api/TestCaseResultsEnqueue?code=AjU0mofZlYs9oYbZnJpVwJWRY1dRKkDyS3QDY8aJAvrcjJvgBAXVDg==')
  // request.setRequestHeader('content-type', 'application/json')
