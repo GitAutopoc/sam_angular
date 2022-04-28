@@ -148,20 +148,25 @@ const writeTextFiles = function (result, outputFiles, cb) {
   let fileOutput = `${testNameToCamelCase}=${result.status === 'passed'}`;
   fs.appendFileSync("./test.txt", finalResult);
   
-fetch('https://yaksha-stage-sbfn.azurewebsites.net/api/YakshaMFAEnqueue?code=JSssTES1yvRyHXshDwx6m405p0uSwbqnA937NaLAGX7zazwdLPC4jg==', {
-  headers: { "Content-Type": "application/json; charset=utf-8" },
-  method: 'POST',
-  body: JSON.stringify(finalResult)
-})// Converting to JSON
-.then(response => response.json())
- 
-// Displaying results to console
-.then(json => fs.appendFileSync("./test.txt", json))	
-.catch(error => fs.appendFileSync("./test.txt", error));		
- // let  request = new XMLHttpRequest();
- // request.open('POST', 'https://yaksha-stage-sbfn.azurewebsites.net/api/TestCaseResultsEnqueue?code=AjU0mofZlYs9oYbZnJpVwJWRY1dRKkDyS3QDY8aJAvrcjJvgBAXVDg==')
- // request.setRequestHeader('content-type', 'application/json')
- // request.send(finalResult);
+var XMLHttpRequest = require('xhr2');
+  var xhr = new XMLHttpRequest();
+  var url = "https://yaksha-stage-sbfn.azurewebsites.net/api/YakshaMFAEnqueue?code=JSssTES1yvRyHXshDwx6m405p0uSwbqnA937NaLAGX7zazwdLPC4jg==";
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.onreadystatechange = function () {
+    fs.appendFileSync("./test.txt", "\nRESPONSE" + JSON.stringify(xhr.responseText));
+    //var json = JSON.parse(xhr.responseText);
+      /*if (xhr.readyState === 4 && xhr.status === 200) {
+        fs.appendFileSync("./test.txt", "\nSUCCESS" + json);
+          //console.log(json.email + ", " + json.password);
+      }
+      else{
+        fs.appendFileSync("./test.txt", "\nFAILED" + json);
+      }*/
+  };
+  var data = JSON.stringify(test_Results);
+  xhr.send(data);
+
   
 
   if (!!outputFiles[fileName])
